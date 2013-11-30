@@ -61,7 +61,7 @@ class Photo(object):
                   'owner', 'dateposted', 'datetaken', 'takengranularity', 
                   'title', 'description', 'ispublic', 'isfriend', 'isfamily', 
                   'cancomment', 'canaddmeta', 'comments', 'tags', 'permcomment', 
-                  'permaddmeta', 'url']
+                  'permaddmeta', 'url', 'originalformat', 'originalsecret']
 
     #XXX: Hopefully None won't cause problems
     def __init__(self, id, owner=None, dateuploaded=None, \
@@ -97,6 +97,8 @@ class Photo(object):
         self.__permcomment = None
         self.__permaddmeta = None
         self.__url = None
+        self.__originalsecret = None
+        self.__originalformat = None
     
     def __setattr__(self, key, value):
         if key in self.__class__.__readonly:
@@ -132,6 +134,10 @@ class Photo(object):
         self.__isfavorite = photo.isfavorite
         self.__license = photo.license
         self.__rotation = photo.rotation
+        if hasattr(photo, 'originalsecret'):
+            self.__originalsecret = photo.originalsecret
+        if hasattr(photo, 'originalformat'):
+            self.__originalformat = photo.originalformat
         
 
 
@@ -418,6 +424,8 @@ class Photoset(object):
     title = property(lambda self: self.__title)
     description = property(lambda self: self.__description)
     primary = property(lambda self: self.__primary)
+    secret = property(lambda self: self.__secret)
+    server = property(lambda self: self.__server)
 
     def __len__(self):
         return self.__count
