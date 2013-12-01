@@ -402,7 +402,7 @@ class Photoset(object):
     """
 
     def __init__(self, id, title=None, primary=None, photos=0, description='', \
-                 secret='', server=''):
+                 secret='', server='', farm = ''):
         self.__id = id
 
         if not title and not primary:
@@ -411,7 +411,10 @@ class Photoset(object):
             title = data.rsp.photoset.title.text
             primary = Photo(data.rsp.photoset.primary)
             description = data.rsp.photoset.description.text
-            count = data.rsp.photoset.photos
+            photos = data.rsp.photoset.photos
+            farm = data.rsp.photoset.farm
+            server = data.rsp.photoset.server
+            secret = data.rsp.photoset.secret
 
         self.__title = title
         self.__primary = primary
@@ -419,6 +422,7 @@ class Photoset(object):
         self.__count = photos
         self.__secret = secret
         self.__server = server
+        self.__farm = farm
         
     id = property(lambda self: self.__id)
     title = property(lambda self: self.__title)
@@ -426,6 +430,8 @@ class Photoset(object):
     primary = property(lambda self: self.__primary)
     secret = property(lambda self: self.__secret)
     server = property(lambda self: self.__server)
+    farm = property(lambda self: self.__farm)
+    count = property(lambda self: self.__count)
 
     def __len__(self):
         return self.__count
@@ -624,6 +630,7 @@ class User(object):
             for photoset in data.rsp.photosets.photoset:
                 sets.append(Photoset(photoset.id, photoset.title.text,\
                                      Photo(photoset.primary),\
+                                     farm = photoset.farm, \
                                      secret=photoset.secret, \
                                      server=photoset.server, \
                                      description=photoset.description.text,
@@ -632,6 +639,7 @@ class User(object):
             photoset = data.rsp.photosets.photoset
             sets.append(Photoset(photoset.id, photoset.title.text,\
                                      Photo(photoset.primary),\
+                                     farm = photoset.farm, \
                                      secret=photoset.secret, \
                                      server=photoset.server, \
                                      description=photoset.description.text,
